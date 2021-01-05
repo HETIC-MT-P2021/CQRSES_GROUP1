@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/models"
 	"github.com/joho/godotenv"
 )
 
@@ -19,6 +20,5 @@ func main() {
 	}
 
 	models.ConnectToDB(env["DB_HOST"], env["DB_NAME"], env["DB_USER"], env["DB_PASSWORD"], dbPort)
-
 
 }
