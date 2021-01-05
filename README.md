@@ -19,7 +19,7 @@ docker-compose up --build
 
 You can find the api doc by clicking on the link below :
 
-[Swagger]()
+[Swagger](https://app.swaggerhub.com/apis-docs/acauchois/GoTemplate/1.0.0)
 
 ### Technical Choices
 
