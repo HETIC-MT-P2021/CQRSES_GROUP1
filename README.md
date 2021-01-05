@@ -18,24 +18,26 @@ docker-compose up --build
 ### Documentation
 
 You can find the api doc by clicking on the link below :
-[DOC]()
+
+[Swagger]()
 
 ### Technical Choices
 
 Feel free to discuss with any contributor about the technical choices that were made.
-Go version: `1.15`
-PostgreSQL: `13`
+
+- Go version: `1.15`
+- PostgreSQL: `13`
 
 ## Contributing
 
-See [CONTRIBUTING.MD] (https://github.com/HETIC-MT-P2021/CQRSES_GROUP1/blob/main/CONTRIBUTING.MD)
+See [CONTRIBUTING.MD](https://github.com/HETIC-MT-P2021/CQRSES_GROUP1/blob/main/CONTRIBUTING.MD)
 
 ### Authors
 
 - [Tsabot](https://github.com/Tsabot)
-- [myouuu] (https://github.com/myouuu)
-- [acauchois] (https://github.com/acauchois)
-- [gensjaak] (https://github.com/gensjaak)
+- [myouuu](https://github.com/myouuu)
+- [acauchois](https://github.com/acauchois)
+- [gensjaak](https://github.com/gensjaak)
 
 ### License
 
