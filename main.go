@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
+
+	"CQRSES/models"
 )
 
 func main() {
