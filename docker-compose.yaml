@@ -14,14 +14,15 @@ services:
     ports:
       - ${POSTGRES_PORT}:5432
 
-  couchdb:
-    image: docker.io/bitnami/couchdb:latest
+  couchbase:
+    image: bentonam/couchbase-docker:latest
     environment:
-      - COUCHDB_USER="${COUCH_USER}"
-      - COUCHDB_PASSWORD="${COUCH_PASSWORD}"
+      CLUSTER_USERNAME: ${COUCH_USER}
+      CLUSTER_PASSWORD: ${COUCH_PASSWORD}
+      COUCH_CLUSTER_NAME: ${POSTGRES_PORT}
     ports:
-      - "5984:5984"
-      - "9100:9100"
+      - "8091-8094:8091-8094"
+      - "11210:11210"
     volumes:
       - ./couchdb-data:/bitnami/couchdb
 
@@ -39,4 +40,4 @@ services:
     command: go run main.go
     links:
       - db
-      - couchdb
+      - couchbase
