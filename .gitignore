@@ -5,6 +5,7 @@
 *.so
 *.dylib
 
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -20,3 +21,6 @@ tmp
 # To push the folder with correct permissions but skip it's content
 couchdb-data/*
 !couchdb-data/.gitkeep
+
+.idea
+.DS_Store

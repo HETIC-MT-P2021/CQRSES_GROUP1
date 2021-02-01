@@ -4,10 +4,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"CQRSES/auth"
-	"CQRSES/models"
-	"CQRSES/responses"
-	"CQRSES/utils/formaterror"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/auth"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/models"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/responses"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/utils/formaterror"
 	"golang.org/x/crypto/bcrypt"
 )
 

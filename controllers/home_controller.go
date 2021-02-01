@@ -2,7 +2,7 @@ package controllers
 import (
 	"net/http"
 
-	"CQRSES/responses"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/responses"
 )
 
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {

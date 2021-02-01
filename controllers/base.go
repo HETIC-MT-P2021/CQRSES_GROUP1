@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres database driver
 
-	"CQRSES/models"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/models"
 )
 
 type Server struct {
