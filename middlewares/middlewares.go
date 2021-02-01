@@ -3,8 +3,8 @@ import (
 	"errors"
 	"net/http"
 
-	"CQRSES/auth"
-	"CQRSES/responses"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/auth"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/responses"
 )
 
 func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
