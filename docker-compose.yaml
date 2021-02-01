@@ -14,6 +14,17 @@ services:
     ports:
       - ${POSTGRES_PORT}:5432
 
+  couchdb:
+    image: docker.io/bitnami/couchdb:latest
+    environment:
+      - COUCHDB_USER="${COUCH_USER}"
+      - COUCHDB_PASSWORD="${COUCH_PASSWORD}"
+    ports:
+      - "5984:5984"
+      - "9100:9100"
+    volumes:
+      - ./couchdb-data:/bitnami/couchdb
+
   app:
     build:
       context: .
@@ -28,3 +39,4 @@ services:
     command: go run main.go
     links:
       - db
+      - couchdb
