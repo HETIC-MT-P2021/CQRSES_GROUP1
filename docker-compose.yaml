@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  db:
+  postgres:
     image: postgres:13-alpine
     restart: always
     environment:
@@ -37,8 +37,6 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
-    labels:
-      NAME: rabbitmq
 
   app:
     build:
@@ -53,6 +51,6 @@ services:
       - "${API_PORT}:${DOCKER_API_PORT}"
     command: go run main.go
     links:
-      - db
+      - postgres
       - couchbase
       - rabbit
