@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 
 	"github.com/joho/godotenv"
+	"log"
+	"os"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/controllers"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/seed"
 )
