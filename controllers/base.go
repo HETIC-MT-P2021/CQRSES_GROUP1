@@ -35,8 +35,6 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 	server.DB.Debug().AutoMigrate(&models.User{}) //database migration
 
-	models.ConnectToCouchBase(couchHost, couchUser, couchPw)
-
 	server.Router = mux.NewRouter()
 
 	server.initializeRoutes()
