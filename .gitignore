@@ -22,8 +22,8 @@
 tmp
 
 # To push the folder with correct permissions but skip it's content
-./couchbase-data
-./postgres-data
+couchbase-data
+postgres-data
 
 .idea
 .DS_Store

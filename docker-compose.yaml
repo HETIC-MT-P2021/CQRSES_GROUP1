@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  db:
+  postgres:
     image: postgres:13-alpine
     restart: always
     environment:
@@ -26,6 +26,18 @@ services:
     volumes:
       - ./couchbase-data:/opt/couchbase/var
 
+  rabbit:
+    image: rabbitmq:3-management
+    hostname: rabbit
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_DEFAULT_USER: "${RABBIT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBIT_PASSWORD}"
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - 15672:15672
+      - 5672:5672
+
   app:
     build:
       context: .
@@ -39,5 +51,6 @@ services:
       - "${API_PORT}:${DOCKER_API_PORT}"
     command: go run main.go
     links:
-      - db
+      - postgres
       - couchbase
+      - rabbit
