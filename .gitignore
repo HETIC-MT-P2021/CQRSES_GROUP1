@@ -27,3 +27,5 @@ tmp
 
 .idea
 .DS_Store
+
+postgres-data
