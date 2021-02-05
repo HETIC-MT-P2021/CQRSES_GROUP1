@@ -1,4 +1,5 @@
 package controllers
+
 import (
 	"fmt"
 	"log"
@@ -17,7 +18,7 @@ type Server struct {
 	Router *mux.Router
 }
 
-func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) {
+func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName, couchHost, couchUser, couchPw string) {
 
 	var err error
 

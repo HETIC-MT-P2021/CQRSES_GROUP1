@@ -15,6 +15,15 @@ After cloning the repo, `cd` into the project, create the .env according to .env
 docker-compose up --build
 ```
 
+Go to http://localhost:8091/
+Enter the env COUCH_USER/COUCH_PASSWORD
+Create Two Buckets as CouchBase:
+
+- event-store
+- read-models
+
+Restart the docker-compose
+
 ### Documentation
 
 You can find the api doc by clicking on the link below :
@@ -27,6 +36,7 @@ Feel free to discuss with any contributor about the technical choices that were 
 
 - Go version: `1.15`
 - PostgreSQL: `13`
+- CouchBase: `5.5.x`
 
 ## Contributing
 
