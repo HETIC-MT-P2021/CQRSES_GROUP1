@@ -15,14 +15,16 @@ services:
       - ${POSTGRES_PORT}:5432
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: ./Docker/Dockerfile
     environment:
       GIN_MODE: "release"
     volumes:
       - .:/app
     working_dir: /app
     ports:
-      - "${API_PORT}:8080"
+      - "${API_PORT}:${DOCKER_API_PORT}"
     command: go run main.go
     links:
       - db

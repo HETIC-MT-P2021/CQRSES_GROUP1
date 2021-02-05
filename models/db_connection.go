@@ -1,14 +1,13 @@
 package models
 
-
-
 import (
-"database/sql"
-"fmt"
-"time"
+	"database/sql"
+	"fmt"
+	"time"
 
-// Import for postgres
-_ "github.com/lib/pq"
+
+	// Import for postgres
+	_ "github.com/lib/pq"
 )
 
 var db *sql.DB

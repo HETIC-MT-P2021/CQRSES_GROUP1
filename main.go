@@ -2,25 +2,32 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/joho/godotenv"
 
-	"CQRSES/models"
+	"log"
+	"os"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/controllers"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/seed"
+
 )
 
+var server = controllers.Server{}
+
 func main() {
-	fmt.Println("Starting Bot")
 
-	env, _ := godotenv.Read(".env")
-
-	dbPort, dbErr := strconv.ParseInt(env["DB_PORT"], 10, 64)
-
-	if dbErr != nil {
-		panic(dbErr)
+	var err error
+	err = godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error getting env, not comming through %v", err)
+	} else {
+		fmt.Println("We are getting the env values")
 	}
 
-	models.ConnectToDB(env["DB_HOST"], env["DB_NAME"], env["DB_USER"], env["DB_PASSWORD"], dbPort)
+	server.Initialize(os.Getenv("DB_DRIVER"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
 
+	seed.Load(server.DB)
+
+	server.Run(":8080")
 
 }
