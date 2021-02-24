@@ -2,16 +2,15 @@ package producer
 
 import (
 	"fmt"
+	"github.com/streadway/amqp"
 	"log"
 	"time"
-
-	"github.com/streadway/amqp"
 )
 
 // RabbitMQ connection global instance
 var RabbitMQ *amqp.Connection
-var MailQueue *amqp.Queue
-var MailChannel *amqp.Channel
+var CreatePostQueue *amqp.Queue
+var CommandChannel *amqp.Channel
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -26,7 +25,7 @@ func ConnectToRabbit(host string, port string, user string, password string) {
 
 	numberOfTest := 0
 
-	for err != nil && numberOfTest < 10 {
+	for err != nil && numberOfTest < 5 {
 		fmt.Println(err)
 		fmt.Println("Connection to the rabbitMQ did not succeed, new try")
 
@@ -44,7 +43,7 @@ func ConnectToRabbit(host string, port string, user string, password string) {
 	failOnError(err, "Failed to open a channel")
 
 	q, err := channel.QueueDeclare(
-		"mails", // name
+		"createPost", // name
 		false,   // durable
 		true,    // delete when unused
 		false,   // exclusive
@@ -54,6 +53,6 @@ func ConnectToRabbit(host string, port string, user string, password string) {
 	failOnError(err, "Failed to declare a queue")
 
 	RabbitMQ = instanceTmp
-	MailQueue = &q
-	MailChannel = channel
+	CreatePostQueue = &q
+	CommandChannel = channel
 }
