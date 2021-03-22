@@ -9,7 +9,7 @@ import (
 )
 
 // PublishPostData sends mail data to message broker
-func PublishPostData(event string, post models.Post) error {
+func PublishPostData(post models.Post) error {
 	body, err := json.Marshal(post)
 
 	if err != nil {
@@ -17,10 +17,10 @@ func PublishPostData(event string, post models.Post) error {
 	}
 
 	err = CommandChannel.Publish(
-		"",             // exchange
+		"",                   // exchange
 		CreatePostQueue.Name, // routing key
-		false,          // mandatory
-		false,          // immediate
+		false,                // mandatory
+		false,                // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        []byte(body),

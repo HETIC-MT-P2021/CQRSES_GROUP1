@@ -1,4 +1,5 @@
 package controllers
+
 import (
 	"encoding/json"
 	"errors"
@@ -7,11 +8,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/auth"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/models"
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/producer"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/responses"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/utils/formaterror"
+	"github.com/gorilla/mux"
 )
 
 func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +52,47 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Lacation", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, postCreated.ID))
 	responses.JSON(w, http.StatusCreated, postCreated)
+}
+
+func (server *Server) CreatePostRabbit(w http.ResponseWriter, r *http.Request) {
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	post := models.Post{}
+	err = json.Unmarshal(body, &post)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	post.Prepare()
+	err = post.Validate()
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+	if uid != post.AuthorID {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
+		return
+	}
+
+	err = producer.PublishPostData(post)
+
+	if err != nil {
+		fmt.Println(err)
+		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusInternalServerError)))
+		return
+	}
+	/*
+		w.Header().Set("Lacation", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, postCreated.ID))
+		responses.JSON(w, http.StatusCreated, postCreated)*/
 }
 
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
