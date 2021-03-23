@@ -39,7 +39,7 @@ Restart the docker-compose
 ```bash
 docker-compose restart
 ```
-###Endpoints  🔀
+### Endpoints  🔀
 Healthcheck ❤️
 
 ```http request
@@ -50,7 +50,7 @@ Login 🔒
 POST /login
 ```
 
-####Users 👦
+#### Users 👦
 Create a new user
 ```http request
 POST /users
@@ -71,7 +71,7 @@ Delete a user
 ```http request
 DELETE /users/{id}
 ```
-####POSTS 📰
+#### POSTS 📰
 Create a new post
 ```http request
 POST /posts
