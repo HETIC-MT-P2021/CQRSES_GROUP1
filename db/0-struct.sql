@@ -1,12 +1,22 @@
-CREATE TABLE profile (
-    profile_id bigserial PRIMARY KEY,
-    label VARCHAR (128) NOT NULL
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "users" (
+    "id" bigserial,
+    "nickname" varchar(255) NOT NULL UNIQUE,
+    "email" varchar(100) NOT NULL UNIQUE,
+    "password" varchar(100) NOT NULL,
+    "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("id")
 );
-
-CREATE TABLE user_account (
-    user_id bigserial PRIMARY KEY,
-    email VARCHAR (128) NOT NULL,
-    password bytea NOT NULL,
-
-    profile_id integer references profile(profile_id)
+DROP TABLE IF EXISTS "posts";
+CREATE TABLE "posts" (
+    "id" bigserial,
+    "title" varchar(255) NOT NULL UNIQUE,
+    "content" varchar(255) NOT NULL,
+    "author_id" bigint NOT NULL,
+    "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("id")
 );
+ALTER TABLE "posts"
+ADD CONSTRAINT posts_author_id_users_id_foreign FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE cascade ON UPDATE cascade;
