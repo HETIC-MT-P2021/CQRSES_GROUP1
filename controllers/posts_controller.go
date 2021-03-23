@@ -12,7 +12,6 @@ import (
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/models"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/producer"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/responses"
-	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/utils/formaterror"
 	"github.com/gorilla/mux"
 )
 
@@ -47,7 +46,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = producer.PublishPostData(post)
+	err = producer.PublishCreatePost(post)
 
 	if err != nil {
 		fmt.Println(err)
@@ -91,35 +90,13 @@ func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
-
-	// Check if the post id is valid
-	pid, err := strconv.ParseUint(vars["id"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-
-	//CHeck if the auth token is valid and  get the user id from it
+	//Check if the auth token is valid and  get the user id from it
 	uid, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 
-	// Check if the post exist
-	post := models.Post{}
-	err = server.DB.Debug().Model(models.Post{}).Where("id = ?", pid).Take(&post).Error
-	if err != nil {
-		responses.ERROR(w, http.StatusNotFound, errors.New("Post not found"))
-		return
-	}
-
-	// If a user attempt to update a post not belonging to him
-	if uid != post.AuthorID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
 	// Read the data posted
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -128,36 +105,33 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Start processing the request data
-	postUpdate := models.Post{}
-	err = json.Unmarshal(body, &postUpdate)
+	post := models.Post{}
+	err = json.Unmarshal(body, &post)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
 	//Also check if the request user id is equal to the one gotten from token
-	if uid != postUpdate.AuthorID {
+	if uid != post.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 
-	postUpdate.Prepare()
-	err = postUpdate.Validate()
+	err = post.Validate()
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	postUpdate.ID = post.ID //this is important to tell the model the post id to update, the other update field are set above
-
-	postUpdated, err := postUpdate.UpdateAPost(server.DB)
+	err = producer.PublishUpdatePost(post)
 
 	if err != nil {
-		formattedError := formaterror.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
-	responses.JSON(w, http.StatusOK, postUpdated)
+
+	responses.JSON(w, http.StatusAccepted, "Request Accepted")
 }
 
 func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
