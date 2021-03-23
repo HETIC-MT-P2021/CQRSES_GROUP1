@@ -8,8 +8,8 @@ import (
 	"github.com/streadway/amqp"
 )
 
-// PublishPostData sends mail data to message broker
-func PublishPostData(post models.Post) error {
+// PublishCreatePost sends createPost command to rabbit
+func PublishCreatePost(post models.Post) error {
 	body, err := json.Marshal(post)
 
 	if err != nil {
@@ -19,6 +19,29 @@ func PublishPostData(post models.Post) error {
 	err = CommandChannel.Publish(
 		"",                   // exchange
 		CreatePostQueue.Name, // routing key
+		false,                // mandatory
+		false,                // immediate
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        []byte(body),
+		})
+
+	log.Printf(" [x] Sent %s", body)
+	failOnError(err, "Failed to publish a message")
+	return nil
+}
+
+// PublishUpdatePost sends updatePost command to rabbit
+func PublishUpdatePost(post models.Post) error {
+	body, err := json.Marshal(post)
+
+	if err != nil {
+		return err
+	}
+
+	err = CommandChannel.Publish(
+		"",                   // exchange
+		UpdatePostQueue.Name, // routing key
 		false,                // mandatory
 		false,                // immediate
 		amqp.Publishing{
