@@ -1,8 +1,10 @@
 package controllers
+
 import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -17,13 +19,25 @@ type Server struct {
 	Router *mux.Router
 }
 
-func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) {
-
+func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName, couchHost, couchUser, couchPw string) {
 	var err error
 
 	if Dbdriver == "postgres" {
 		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
 		server.DB, err = gorm.Open(Dbdriver, DBURL)
+
+		numberOfTest := 0
+
+		for err != nil && numberOfTest < 5 {
+			fmt.Println(err)
+			fmt.Println("Connection to DB did not succeed, new try")
+
+			time.Sleep(5 * time.Second)
+			server.DB, err = gorm.Open(Dbdriver, DBURL)
+
+			numberOfTest++
+		}
+
 		if err != nil {
 			fmt.Printf("Cannot connect to %s database", Dbdriver)
 			log.Fatal("This is the error:", err)

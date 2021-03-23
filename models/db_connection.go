@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-
 	// Import for postgres
 	_ "github.com/lib/pq"
 )
@@ -14,8 +13,9 @@ var db *sql.DB
 
 // ConnectToDB Set up connection to the postgres DB
 // Will panic on error
-func ConnectToDB(host string, dbname string, user string, password string, port int64) {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+func ConnectToDB(host string, dbname string, user string, password string, port string) {
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 	tempDB, err := sql.Open("postgres", psqlInfo)
@@ -30,7 +30,6 @@ func ConnectToDB(host string, dbname string, user string, password string, port 
 	}
 
 	err = tempDB.Ping()
-
 	numberOfTest := 0
 
 	for err != nil && numberOfTest < 5 {

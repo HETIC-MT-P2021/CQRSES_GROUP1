@@ -1,12 +1,16 @@
-CREATE TABLE profile (
-    profile_id bigserial PRIMARY KEY,
-    label VARCHAR (128) NOT NULL
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "users" (
+    "id" bigserial,
+    "nickname" varchar(255) NOT NULL UNIQUE,
+    "email" varchar(100) NOT NULL UNIQUE,
+    "password" varchar(100) NOT NULL,
+    "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("id")
 );
 
-CREATE TABLE user_account (
-    user_id bigserial PRIMARY KEY,
-    email VARCHAR (128) NOT NULL,
-    password bytea NOT NULL,
-
-    profile_id integer references profile(profile_id)
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "post_next_id" (
+    "id" bigserial,
+    PRIMARY KEY ("id")
 );
