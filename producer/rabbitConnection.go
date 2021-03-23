@@ -5,20 +5,35 @@ import (
 	"log"
 	"time"
 
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/consts"
 	"github.com/streadway/amqp"
 )
 
 // RabbitMQ connection global instance
 var RabbitMQ *amqp.Connection
-var CreatePostQueue *amqp.Queue
-var UpdatePostQueue *amqp.Queue
-var DeletePostQueue *amqp.Queue
 var CommandChannel *amqp.Channel
 
+func queuefailOnError(err error, msg string, queueName string) {
+	if err != nil {
+		log.Fatalf("%s: %s for queue: %s", msg, err, queueName)
+	}
+}
 func failOnError(err error, msg string) {
 	if err != nil {
-		log.Fatalf("%s: %s", msg, err)
+		log.Fatalf("%s: %s ", msg, err)
 	}
+}
+
+func initQueue(queueName string) {
+	_, err := CommandChannel.QueueDeclare(
+		queueName, // name
+		false,     // durable
+		true,      // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
+	)
+	queuefailOnError(err, "Failed to declare a queue", queueName)
 }
 
 // ConnectToRabbit connects to RabbitMQ instance
@@ -45,42 +60,13 @@ func ConnectToRabbit(host string, port string, user string, password string) {
 
 	failOnError(err, "Failed to open a channel")
 
-	// TODO: extract in func to init like pass array of queueName => init all
-	// TOTO: Queue Name => Consts
+	CommandChannel = channel
 
-	createQ, err := channel.QueueDeclare(
-		"createPost", // name
-		false,        // durable
-		true,         // delete when unused
-		false,        // exclusive
-		false,        // no-wait
-		nil,          // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
+	allQueues := []string{consts.CREATE_POST_COMMAND_QUEUE, consts.UPDATE_POST_COMMAND_QUEUE, consts.DELETE_POST_COMMAND_QUEUE}
 
-	updateQ, err := channel.QueueDeclare(
-		"updatePost", // name
-		false,        // durable
-		true,         // delete when unused
-		false,        // exclusive
-		false,        // no-wait
-		nil,          // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
-
-	deleteQ, err := channel.QueueDeclare(
-		"deletePost", // name
-		false,        // durable
-		true,         // delete when unused
-		false,        // exclusive
-		false,        // no-wait
-		nil,          // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
+	for _, queueName := range allQueues {
+		initQueue(queueName)
+	}
 
 	RabbitMQ = instanceTmp
-	CreatePostQueue = &createQ
-	UpdatePostQueue = &updateQ
-	DeletePostQueue = &deleteQ
-	CommandChannel = channel
 }

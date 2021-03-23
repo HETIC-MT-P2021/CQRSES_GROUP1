@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/couchbase/gocb"
 	"github.com/jinzhu/gorm"
 )
 
@@ -118,4 +119,11 @@ func (p *Post) DeleteAPost(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 		return 0, db.Error
 	}
 	return db.RowsAffected, nil
+}
+
+func GetReadModel(id string) (Post, gocb.Cas, error) {
+	var post Post
+	cas, error := ReadBucket.Get(id, &post)
+
+	return post, cas, error
 }
