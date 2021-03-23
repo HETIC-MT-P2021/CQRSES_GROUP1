@@ -3,6 +3,7 @@ version: "3"
 services:
   postgres:
     image: postgres:13-alpine
+    container_name: postgres_db
     restart: always
     environment:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
@@ -16,6 +17,8 @@ services:
 
   couchbase:
     image: bentonam/couchbase-docker:latest
+    hostname: couchbase
+    container_name: couchbase_db
     environment:
       CLUSTER_USERNAME: ${COUCH_USER}
       CLUSTER_PASSWORD: ${COUCH_PASSWORD}
@@ -41,7 +44,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./Docker/Dockerfile
+      dockerfile: ./docker/Dockerfile
+    env_file: .env
     environment:
       GIN_MODE: "release"
     volumes:
