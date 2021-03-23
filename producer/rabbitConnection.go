@@ -12,6 +12,7 @@ import (
 var RabbitMQ *amqp.Connection
 var CreatePostQueue *amqp.Queue
 var UpdatePostQueue *amqp.Queue
+var DeletePostQueue *amqp.Queue
 var CommandChannel *amqp.Channel
 
 func failOnError(err error, msg string) {
@@ -44,6 +45,9 @@ func ConnectToRabbit(host string, port string, user string, password string) {
 
 	failOnError(err, "Failed to open a channel")
 
+	// TODO: extract in func to init like pass array of queueName => init all
+	// TOTO: Queue Name => Consts
+
 	createQ, err := channel.QueueDeclare(
 		"createPost", // name
 		false,        // durable
@@ -64,8 +68,19 @@ func ConnectToRabbit(host string, port string, user string, password string) {
 	)
 	failOnError(err, "Failed to declare a queue")
 
+	deleteQ, err := channel.QueueDeclare(
+		"deletePost", // name
+		false,        // durable
+		true,         // delete when unused
+		false,        // exclusive
+		false,        // no-wait
+		nil,          // arguments
+	)
+	failOnError(err, "Failed to declare a queue")
+
 	RabbitMQ = instanceTmp
 	CreatePostQueue = &createQ
 	UpdatePostQueue = &updateQ
+	DeletePostQueue = &deleteQ
 	CommandChannel = channel
 }
