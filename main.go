@@ -10,15 +10,12 @@ import (
 
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/controllers"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/producer"
-	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/seed"
 )
 
 var server = controllers.Server{}
 
 func main() {
-
-	var err error
-	err = godotenv.Load()
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error getting env, not comming through %v", err)
 	} else {
@@ -34,8 +31,8 @@ func main() {
 		os.Getenv("RABBIT_PASSWORD"),
 	)
 
-	seed.Load(server.DB)
+	// Don't seed data here. Use docker-entrypoint instead
+	// seed.Load(server.DB)
 
 	server.Run(":8080")
-
 }
