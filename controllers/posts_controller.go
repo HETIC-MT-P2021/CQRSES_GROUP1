@@ -76,18 +76,16 @@ func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	pid, err := strconv.ParseUint(vars["id"], 10, 64)
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
-	post := models.Post{}
 
-	postReceived, err := post.FindPostByID(server.DB, pid)
+	pid := vars["id"]
+
+	postReceived, _, err := models.GetReadModel(pid)
+
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return
 	}
+
 	responses.JSON(w, http.StatusOK, postReceived)
 }
 

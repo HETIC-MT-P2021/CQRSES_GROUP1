@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
+	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/consts"
 	"github.com/HETIC-MT-P2021/CQRSES_GROUP1/models"
 	"github.com/streadway/amqp"
 )
@@ -17,10 +18,10 @@ func PublishCreatePost(post models.Post) error {
 	}
 
 	err = CommandChannel.Publish(
-		"",                   // exchange
-		CreatePostQueue.Name, // routing key
-		false,                // mandatory
-		false,                // immediate
+		"",                               // exchange
+		consts.CREATE_POST_COMMAND_QUEUE, // routing key
+		false,                            // mandatory
+		false,                            // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        []byte(body),
@@ -40,10 +41,10 @@ func PublishUpdatePost(post models.Post) error {
 	}
 
 	err = CommandChannel.Publish(
-		"",                   // exchange
-		UpdatePostQueue.Name, // routing key
-		false,                // mandatory
-		false,                // immediate
+		"",                               // exchange
+		consts.UPDATE_POST_COMMAND_QUEUE, // routing key
+		false,                            // mandatory
+		false,                            // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        []byte(body),
@@ -63,10 +64,10 @@ func PublishDeletePost(post models.Post) error {
 	}
 
 	err = CommandChannel.Publish(
-		"",                   // exchange
-		DeletePostQueue.Name, // routing key
-		false,                // mandatory
-		false,                // immediate
+		"",                               // exchange
+		consts.DELETE_POST_COMMAND_QUEUE, // routing key
+		false,                            // mandatory
+		false,                            // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        []byte(body),
