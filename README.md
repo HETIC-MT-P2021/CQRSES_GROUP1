@@ -16,7 +16,6 @@ The consumer wait to receive messages from the message broker host in the main p
 - User management.
 - Article management.
 
-
 ## Starting the project 🚀
 
 After cloning the repo, `cd` into the project, create the .env according to .env.example, and run the following commands

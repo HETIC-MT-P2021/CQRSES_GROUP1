@@ -14,8 +14,10 @@ require (
 	github.com/lib/pq v1.9.0
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/streadway/amqp v1.0.0
+	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	gopkg.in/couchbase/gocbcore.v7 v7.1.18 // indirect
 	gopkg.in/couchbaselabs/gocbconnstr.v1 v1.0.4 // indirect
 	gopkg.in/couchbaselabs/jsonx.v1 v1.0.0 // indirect
+	gopkg.in/go-playground/assert.v1 v1.2.1
 )
